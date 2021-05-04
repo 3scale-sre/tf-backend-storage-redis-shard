@@ -33,7 +33,7 @@ resource "aws_instance" "this" {
   }
   tags = merge(
     var.tags,
-    map("Name", format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + 1)),
+    tomap({"Name" = format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + 1)}),
   )
 }
 
