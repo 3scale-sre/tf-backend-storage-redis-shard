@@ -7,19 +7,19 @@ resource "aws_instance" "this" {
   disable_api_termination = var.disable_api_termination
   vpc_security_group_ids  = [var.security_group]
   iam_instance_profile    = var.iam_role
-  user_data = templatefile("${path.module}/storage-userdata.tpl", {
-    HOSTNAME                             = format("bck-storage0%s-0%s", var.shard_id, count.index + 1)
-    DNS_ZONE                             = var.dns_zone_name
-    THREESCALE_QUAY_DOCKER_AUTH_TOKEN    = var.threescale_quay_docker_auth_token
-    THREESCALE_GITHUB_SSH_KEY_TOKEN      = var.threescale_github_ssh_key_token
-    ELASTICSEARCH_HOST                   = var.elasticsearch_host
-    ELASTICSEARCH_INDEX                  = var.elasticsearch_index
-    BACKUPS_ENABLED                      = var.backups_enabled
-    S3_BACKUPS_BUCKET_NAME               = var.s3_backups_bucket_name
-    S3_BACKUPS_BUCKET_PREFIX             = var.s3_backups_bucket_prefix
-    S3_BACKUPS_BUCKET_MIN_SIZE_CHECK     = var.s3_backups_bucket_min_size_check
-    S3_BACKUPS_BUCKET_PERIOD_CHECK_HOURS = var.s3_backups_bucket_period_check_hours
-  })
+  # user_data = templatefile("${path.module}/storage-userdata.tpl", {
+  #   HOSTNAME                             = format("bck-storage0%s-0%s", var.shard_id, count.index + 1)
+  #   DNS_ZONE                             = var.dns_zone_name
+  #   THREESCALE_QUAY_DOCKER_AUTH_TOKEN    = var.threescale_quay_docker_auth_token
+  #   THREESCALE_GITHUB_SSH_KEY_TOKEN      = var.threescale_github_ssh_key_token
+  #   ELASTICSEARCH_HOST                   = var.elasticsearch_host
+  #   ELASTICSEARCH_INDEX                  = var.elasticsearch_index
+  #   BACKUPS_ENABLED                      = var.backups_enabled
+  #   S3_BACKUPS_BUCKET_NAME               = var.s3_backups_bucket_name
+  #   S3_BACKUPS_BUCKET_PREFIX             = var.s3_backups_bucket_prefix
+  #   S3_BACKUPS_BUCKET_MIN_SIZE_CHECK     = var.s3_backups_bucket_min_size_check
+  #   S3_BACKUPS_BUCKET_PERIOD_CHECK_HOURS = var.s3_backups_bucket_period_check_hours
+  # })
   root_block_device {
     volume_type           = "gp2"
     volume_size           = var.root_volume_size
@@ -33,8 +33,13 @@ resource "aws_instance" "this" {
   }
   tags = merge(
     var.tags,
-    tomap({"Name" = format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + 1)}),
+    tomap({ "Name" = format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + 1) }),
   )
+
+  lifecycle {
+    ignore_changes = [user_data]
+  }
+
 }
 
 resource "aws_route53_record" "this_internal_dns" {
