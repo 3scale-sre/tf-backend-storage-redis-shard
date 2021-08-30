@@ -68,7 +68,7 @@ write_files:
       Type=simple
       ExecStartPre=-/usr/bin/docker kill redis-exporter
       ExecStartPre=-/usr/bin/docker rm redis-exporter
-      ExecStart=/bin/sh -c 'docker run --name=redis-exporter -v /usr/local/etc/get_redis_conf.lua:/usr/local/etc/get_redis_conf.lua:ro --net=host oliver006/redis_exporter:v0.21.0 -script /usr/local/etc/get_redis_conf.lua'
+      ExecStart=/bin/sh -c 'docker run --name=redis-exporter -v /usr/local/etc/get_redis_conf.lua:/usr/local/etc/get_redis_conf.lua:ro --net=host oliver006/redis_exporter:v0.21.0 -script /usr/local/etc/get_redis_conf.lua -redis.addr redis://127.0.0.1:6379'
       ExecStop=-/usr/bin/docker stop redis-exporter
 
       [Install]
