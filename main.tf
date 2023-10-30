@@ -32,7 +32,7 @@ resource "aws_instance" "this" {
 resource "aws_route53_record" "this_internal_dns" {
   count   = var.node_count
   zone_id = var.dns_zone_id
-  name    = format("bck-storage0%s-0%s.%s", var.shard_id, count.index + var.index_offset + 1, var.dns_zone_name)
+  name    = format("%s-%s-bck-storage0%s-0%s.%s", var.environment, var.project, var.shard_id, count.index + var.index_offset + 1, var.dns_zone_name)
   type    = "A"
   records = [aws_instance.this[count.index].private_ip]
   ttl     = 60
