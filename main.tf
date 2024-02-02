@@ -8,12 +8,12 @@ resource "aws_instance" "this" {
   vpc_security_group_ids  = [var.security_group]
   iam_instance_profile    = var.iam_role
   root_block_device {
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     volume_size           = var.root_volume_size
     delete_on_termination = true
   }
   ebs_block_device {
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     volume_size           = var.redis_data_volume_size
     delete_on_termination = true
     device_name           = "/dev/xvdf"
