@@ -8,15 +8,23 @@ resource "aws_instance" "this" {
   vpc_security_group_ids  = [var.security_group]
   iam_instance_profile    = var.iam_role
   root_block_device {
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     volume_size           = var.root_volume_size
     delete_on_termination = true
+    tags = merge(
+      var.tags,
+      tomap({ "Name" = format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + var.index_offset + 1) }),
+    )
   }
   ebs_block_device {
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     volume_size           = var.redis_data_volume_size
     delete_on_termination = true
     device_name           = "/dev/xvdf"
+    tags = merge(
+      var.tags,
+      tomap({ "Name" = format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + var.index_offset + 1) }),
+    )
   }
   tags = merge(
     var.tags,
