@@ -1,5 +1,6 @@
----
-approvers:
-- 3scale-sre-approvers
-reviewers:
-- 3scale-sre-reviewers
+"approvers":
+- "team-sre-approvers"
+"labels":
+- "wg/sre"
+"reviewers":
+- "team-sre-reviewers"
