@@ -29,6 +29,7 @@ resource "aws_instance" "this" {
   tags = merge(
     var.tags,
     tomap({ "Name" = format("%s-%s-bck-storage0%s-0%s", var.environment, var.project, var.shard_id, count.index + var.index_offset + 1) }),
+    tomap({ "architecture" = var.instance_architecture }),
   )
 
   lifecycle {

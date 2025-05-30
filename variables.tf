@@ -76,6 +76,12 @@ variable "instance_type" {
   description = "AWS EC2 instance type"
 }
 
+variable "instance_architecture" {
+  type        = string
+  default     = "x86_64"
+  description = "AWS EC2 instance processor architecture"
+}
+
 variable "root_volume_size" {
   type        = string
   default     = "50"
